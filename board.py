@@ -5,19 +5,13 @@ class Board:
     def __init__(self, win):
         self._win = win
         self._board = [
-            ["X", "", ""],
-            ["", "O", ""],
-            ["", "", "X"]
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""]
         ]
         self.create_board()
 
     def create_board(self):
-        i, j = self._get_best_move()
-        self._board[i][j] = "X"
-        self._board[2][0] = "O"
-        i, j = self._get_best_move()
-        self._board[i][j] = "X"
-
         self.lines = [
             Line(self._win.width / 3, 0, self._win.width / 3, self._win.height),
             Line(self._win.width / 3 * 2, 0, self._win.width /3 * 2, self._win.height),
@@ -56,7 +50,12 @@ class Board:
         button = self.buttons[i][j].button
         if button.cget("text") == "":
             button.config(text="O")
-            self._board[i][j] = "0"
+            self._board[i][j] = "O"
+
+        i, j = self._get_best_move()
+        self._board[i][j] = "X"
+        button = self.buttons[i][j].button
+        button.config(text="X")
 
     def _did_x_win(self, board):
         for i in range(len(board)):
