@@ -5,13 +5,16 @@ class Board:
     def __init__(self, win):
         self._win = win
         self._board = [
-            ["X", "X", "O"],
+            ["X", "", ""],
             ["", "O", ""],
             ["", "", "X"]
         ]
         self.create_board()
 
     def create_board(self):
+        i, j = self._get_best_move()
+        self._board[i][j] = "X"
+        self._board[2][0] = "O"
         i, j = self._get_best_move()
         self._board[i][j] = "X"
 
@@ -124,7 +127,7 @@ class Board:
         moves = []
         for i, j in self._possible_moves(self._board):
             self._board[i][j] = "X"
-            moves.append((i, j, self._minimax(self._board, 0, True)))
+            moves.append((i, j, self._minimax(self._board, 0, False)))
             self._board[i][j] = ""
 
         best_move = (2, 2, float("-inf"))
@@ -133,9 +136,6 @@ class Board:
             if move[2] > best_move[2]:
                 best_move = move
         return best_move[0], best_move[1]
-
-
-
 
     def _minimax(self, board, depth, is_maximizing_player):
         if self._is_game_over(board):
