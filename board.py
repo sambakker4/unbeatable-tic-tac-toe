@@ -1,5 +1,5 @@
 from elements import Line, TicTacToeButton
-from copy import deepcopy
+import tkinter
 
 class Board:
     def __init__(self, win):
@@ -46,16 +46,26 @@ class Board:
                 button.draw()
 
     def on_click(self, pos):
+        if self.is_game_over():
+            self.disable_board()
+            return
+
         i, j = pos
         button = self.buttons[i][j].button
         if button.cget("text") == "":
             button.config(text="O")
             self._board[i][j] = "O"
 
-        i, j = self._get_best_move()
-        self._board[i][j] = "X"
-        button = self.buttons[i][j].button
-        button.config(text="X")
+        if len(self._possible_moves(self._board)) > 0:
+            i, j = self._get_best_move()
+            self._board[i][j] = "X"
+            button = self.buttons[i][j].button
+            button.config(text="X")
+
+    def disable_board(self):
+        for row in self.buttons:
+            for button in row:
+                button.button.config(state=tkinter.DISABLED)
 
     def _did_x_win(self, board):
         for i in range(len(board)):
@@ -91,7 +101,8 @@ class Board:
 
         return False
 
-    def _is_game_over(self, board):
+    def is_game_over(self):
+        board = self._board
         if self._possible_moves(board) == []:
             return True
 
@@ -137,7 +148,7 @@ class Board:
         return best_move[0], best_move[1]
 
     def _minimax(self, board, depth, is_maximizing_player):
-        if self._is_game_over(board):
+        if self.is_game_over():
             if self._did_x_win(board):
                 return 10 - depth
             elif self._did_o_win(board):
@@ -165,4 +176,12 @@ class Board:
                 best_val = min(value, best_val)
 
             return best_val
+
+    def who_won(self):
+        if self._did_o_win(self._board):
+            return "O"
+        elif self._did_x_win(self._board):
+            return "X"
+        else:
+            return "DRAW"
 
