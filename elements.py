@@ -1,13 +1,14 @@
 from tkinter import Button
 class Line:
     def __init__(self, x1, y1, x2, y2):
-        self._x1 = x1
-        self._y1 = y1
-        self._x2 = x2
-        self._y2 = y2
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
 
-    def draw(self, canvas, fill="black"):
-        canvas.create_line(self._x1, self._y1, self._x2, self._y2, fill=fill, width=2)
+    def draw(self, canvas, fill="black", width=2):
+        id = canvas.create_line(self.x1, self.y1, self.x2, self.y2, fill=fill, width=width)
+        canvas.tag_raise(id)
 
 class TicTacToeButton:
     def __init__(self, width, height, win, text, x, y, command, pos):
@@ -15,6 +16,7 @@ class TicTacToeButton:
         self.width = width
         self.pos = pos
         self.height = height
+
         self.button = Button(
             win.root,
             text=text,
@@ -25,8 +27,8 @@ class TicTacToeButton:
             highlightthickness=0,
             command=lambda: command(self.pos)
         )
-        self._x = x
-        self._y = y
+        self.x = x
+        self.y = y
 
     def draw(self):
-        self.button.place(x=self._x, y=self._y, width=self.width, height=self.height)
+        self.button.place(x=self.x, y=self.y, width=self.width, height=self.height)
